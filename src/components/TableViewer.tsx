@@ -105,7 +105,7 @@ export function TableViewer({ tableName }: TableViewerProps) {
       'questions': 'вопросительные\nпредложения',
       'exclamations': 'восклицательные\nпредложения',
       'emojis': 'эмоджи',
-      'topic_category': 'категория темы',
+      'topic_category': 'категория',
       'numeric_id': 'ID',
       'username': 'имя пользователя',
       'labels': 'метки',
