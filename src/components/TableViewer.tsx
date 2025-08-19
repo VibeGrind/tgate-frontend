@@ -205,6 +205,39 @@ export function TableViewer({ tableName }: TableViewerProps) {
     return String(value)
   }
 
+  // Функция для полного отображения в tooltip'ах
+  const formatFullValue = (value: any, columnKey?: string): string => {
+    if (value === null || value === undefined) return '-'
+    if (typeof value === 'object') return JSON.stringify(value, null, 2)
+    if (typeof value === 'boolean') return value ? 'Yes' : 'No'
+    
+    // Форматирование дат для столбцов с датами
+    if (columnKey && ['date', 'created_at', 'updated_at'].includes(columnKey)) {
+      try {
+        const date = new Date(value)
+        if (!isNaN(date.getTime())) {
+          const months = [
+            'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+            'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+          ]
+          
+          const day = date.getDate()
+          const month = months[date.getMonth()]
+          const year = date.getFullYear()
+          const hours = String(date.getHours()).padStart(2, '0')
+          const minutes = String(date.getMinutes()).padStart(2, '0')
+          
+          return `${day} ${month} ${year} ${hours}:${minutes}`
+        }
+      } catch (error) {
+        // Если не удается распарсить дату, возвращаем как есть
+      }
+    }
+    
+    // Возвращаем полный текст без обрезания
+    return String(value)
+  }
+
   const totalPages = data ? Math.ceil(data.total / (filters.page_size || 50)) : 0
   const currentPage = filters.page || 1
 
@@ -526,7 +559,8 @@ export function TableViewer({ tableName }: TableViewerProps) {
                 <tr key={idx}>
                   {displayedColumns.map(col => {
                     const cellValue = formatCellValue(row[col.key], col.key)
-                    const shouldShowTooltip = col.key === 'text_string' || cellValue.length > 100
+                    const fullValue = formatFullValue(row[col.key], col.key)
+                    const shouldShowTooltip = col.key === 'text_string' || fullValue.length > 100
                     
                     return (
                       <td 
@@ -549,7 +583,7 @@ export function TableViewer({ tableName }: TableViewerProps) {
                       >
                         <div 
                           className={`truncate ${col.key === 'text_string' ? 'max-w-lg' : ''}`}
-                          title={formatCellValue(row[col.key], col.key)}
+                          title={fullValue}
                         >
                           {cellValue}
                         </div>
@@ -569,7 +603,7 @@ export function TableViewer({ tableName }: TableViewerProps) {
                                 ? 'text-base font-reading leading-relaxed' 
                                 : 'text-xs'
                             }`}>
-                              {cellValue}
+                              {fullValue}
                             </div>
                           </div>
                         )}
