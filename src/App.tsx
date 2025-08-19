@@ -49,7 +49,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center gap-8">
-              <img src="/tgate-frontend/logo.png" alt="TGate Logo" className="h-[120px] w-auto object-contain max-w-[400px]" />
+              <img src={`${import.meta.env.BASE_URL}logo.png`} alt="TGate Logo" className="h-[120px] w-auto object-contain max-w-[400px]" />
               <div className="h-[60px] w-0.5 bg-gradient-to-b from-transparent via-tgate-text-dark to-transparent rounded opacity-80"></div>
               <div className="flex flex-col">
                 <h1 className="text-4xl font-normal text-tgate-text-dark leading-none">Data</h1>
